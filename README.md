@@ -1,7 +1,7 @@
 # This is my solution to Exove Developer test's task 3A (for trainee application 2023).
 # For 1A, 2B, and 3C see: https://github.com/samijuvaste/exoveDeveloperTest2022
 
-This script starts Docker container that fetches data from an URL, saves the data to a
+This script starts a Docker container that fetches data from an [URL](https://raw.githubusercontent.com/Exove/developer-test/main/material/products.json), saves the data to a
 PostgreSQL database in another Docker container, and finally prints all the data in the
 database. You can run this script with:
 
