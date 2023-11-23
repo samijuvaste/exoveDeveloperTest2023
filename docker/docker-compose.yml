@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  database:
+    container_name: fetcher-database
+    image: "postgres:16.1"
+    restart: "no"
+    environment:
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=database
+  flyway:
+    container_name: "fetcher-flyway"
+    image: flyway/flyway:10.1.0-alpine
+    depends_on:
+      - database
+    volumes:
+      - ../flyway:/flyway/sql
+    command: -connectRetries=60 -baselineOnMigrate=true migrate
+    environment:
+      - FLYWAY_USER=username
+      - FLYWAY_PASSWORD=password
+      - FLYWAY_URL=jdbc:postgresql://fetcher-database:5432/database
+  app:
+    container_name: "fetcher-app"
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    restart: "no"
+    depends_on:
+      flyway:
+        condition: service_completed_successfully
+    environment:
+      - NODE_ENV=production
+      - API_URL=https://raw.githubusercontent.com/Exove/developer-test/main/material/products.json
+      - PGPORT=5432
+      - PGDATABASE=database
+      - PGUSER=username
+      - PGPASSWORD=password
+      - PGHOST=fetcher-database

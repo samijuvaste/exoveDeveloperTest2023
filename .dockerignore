@@ -1,0 +1,8 @@
+build/
+node_modules/
+.editorconfig
+.eslintignore
+.eslintrc
+.gitignore
+README.md
+run.sh
